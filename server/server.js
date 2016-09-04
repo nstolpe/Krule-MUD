@@ -1,27 +1,31 @@
 'use strict'
-
-const http = require('http');
-const socketIO = require('socket.io');
+const app = require('http').createServer()
+const io = require('socket.io')(app);
 const program = require('commander');
 
 require('pkginfo')(module, 'version');
 const version = module.exports.version;
 
+const users = {}
+
+const Models = {
+	User: function(socket) {
+		this.socket = socket;
+	}
+}
+
 program
 	.version(version)
-	.option('-p, --port [port]', 'port to serve from', 1800)
+	.option('-p, --port [port]', 'Port to serve from. Optional, defaults to 1138.', 1138)
 	.parse(process.argv);
 
-const server = http.createServer();
-const io = socketIO(server);
-
-io.sockets.on('connection', function(socket) {
-	console.log('connection');
-	socket.on('send', function(data) {
+io.on('connection', function(socket) {
+	console.log('foo');
+	io.on('send', function(data) {
 		console.log(data);
-		io.sockets.emit('message', data);
+		io.emit('message', data);
 	})
 });
 
-server.listen(program.port);
+app.listen(program.port);
 console.log('listening on ' + program.port);

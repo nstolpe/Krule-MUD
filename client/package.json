@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "ansi-color": "^0.2.1",
-	"socket.io": "latest",
-	"socket.io-client": "latest"
+    "commander": "^2.9.0",
+    "pkginfo": "^0.4.0",
+    "socket.io-client": "latest",
+    "vorpal": "^1.11.4"
   }
 }
