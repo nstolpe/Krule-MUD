@@ -1,0 +1,16 @@
+{
+  "name": "client",
+  "version": "0.0.1",
+  "description": "A Node/Vorpal/Socket.IO mud client",
+  "main": "client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "nils",
+  "license": "ISC",
+  "dependencies": {
+    "ansi-color": "^0.2.1",
+	"socket.io": "latest",
+	"socket.io-client": "latest"
+  }
+}

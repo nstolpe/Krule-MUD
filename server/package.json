@@ -4,11 +4,15 @@
   "description": "A socket.io mud server",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js myApp",
+    "stop": "killall SIGINT myApp"
   },
   "author": "nils",
   "license": "ISC",
   "dependencies": {
+    "commander": "^2.9.0",
+    "pkginfo": "^0.4.0",
     "socket.io": "^1.4.8"
   }
 }
