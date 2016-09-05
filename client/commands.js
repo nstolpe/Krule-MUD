@@ -1,5 +1,5 @@
 'use strict';
-
+function foo() {}
 module.exports = function(Vorpal) {
 	Vorpal
 		.command('connect')
@@ -17,9 +17,8 @@ module.exports = function(Vorpal) {
 			let server = args.options.server || 'localhost',
 				port = args.options.port || 1138,
 				connectionString = 'http://' + server + ':' + port;
-				
-			Vorpal.Socket.connect(server, port);
-			cb();
+			this.log(Vorpal.Socket.connect(server, port, cb));
+			// cb();
 		});
 
 	Vorpal

@@ -10,25 +10,30 @@ class Socket {
 	/**
 	 * Connects to http://<server>:<port>
 	 */
-	connect(server, port) {
+	connect(server, port, cb) {
 		let ws,
-			Vorpal = _Vorpal.get(this);
+			Vorpal = _Vorpal.get(this),
+			message,
+			_self = this;
 
 		ws = new WebSocket('http://' + server + ':' + port);
 
-		ws.on('error', function(err) {
-			// Vorpal.log(err);
-			return Vorpal.log(Vorpal.chalk.red('Connection to server failed'));
+		ws.on('open', function() {
+			Vorpal.log(Vorpal.chalk.green('Connected to %s on port %s.'), server, port);
+			ws.send(JSON.stringify({ type: 'NEW_CONNECTION', message: 'New connection' }));
+			_ws.set(this, ws);
 		});
-		Vorpal.log(Vorpal.chalk.green('Connected to %s on port %s.'), server, port)
-		_ws.set(this, ws);
 
-		let _self = this;
+		ws.on('error', function(err) {
+			return { type: 'ERROR', message: Vorpal.chalk.red('Connection to server failed') };
+		});
 
 		ws.on('message', function(msg) {
-			let message = _self.parseMessage(msg);
-			_self.handleMessage(message);
+			message = _self.parseMessage(msg);
+			Vorpal.log(message);
 		});
+		cb();
+		// return message;
 	}
 	/**
 	 * Returns private property _ws
@@ -54,6 +59,7 @@ class Socket {
 	parseMessage(message) {
 		let parsedMessage,
 			properties = ['type', 'message'];
+
 		try {
 			parsedMessage = JSON.parse(message);
 
@@ -69,17 +75,6 @@ class Socket {
 		}
 
 		return parsedMessage;
-	}
-	handleMessage(message) {
-		let Vorpal = _Vorpal.get(this);
-		switch(message.type) {
-			case 'PROMPT':
-				Vorpal.log(Vorpal.chalk.yellow(message.message));
-				break;
-			case 'ERROR':
-				Vorpal.log(Vorpal.chalk.red(message.message));
-				break;
-		}
 	}
 }
 

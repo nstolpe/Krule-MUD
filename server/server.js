@@ -27,12 +27,18 @@ wss.on('connection', function(ws) {
 	// users.push(user);
 	sockets.push(ws);
 	ws.send(JSON.stringify({ type: 'PROMPT', message: 'Please enter your name' }));
+
+	ws.on('message', function(msg) {
+		console.log(msg);
+	})
+
 	// console.log(ws);
-	console.log('Socket ' + ws + ' has connected');
+	console.log('new socket @%s', ws._socket.remoteAddress);
 	// ws.on('send', function(data) {
 	// 	console.log(data);
 	// 	ws.emit('message', data);
 	// })
 });
+
 
 console.log('listening on ' + program.port);
