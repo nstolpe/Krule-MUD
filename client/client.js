@@ -8,12 +8,20 @@ var socket;
 
 vorpal
 	.command('connect')
-	.option('-h, --host <host>', 'The host')
-	.description('Connects to a MUD server.\n[server] defaults to \'localhost\'\n[port] defaults to 1138\n')
+	.option('-h, --host [host]', 'The host')
+	.option('-p, --port [port]', 'The port')
+	.option('-n, --name <name>', 'User/account name')
+	.alias('cn')
+	.description('Connects to a MUD server.\n-s/--server is optional and defaults to \'localhost\'\n-p/--port is optional and defaults to 1138\n-n/--name is required')
+	.validate(function(args) {
+		if (args.options.name === undefined)
+			return 'The <name> option is required. See `help connect` for details'
+		return true;
+	})
 	.action(function(args, cb) {
 		this.log(args);
 		let cs = 'http://' + (args.options.host || 'localhost') + ':' + (args.options.port || 1138);
-
+cs = 'poo';
 		this.log(cs)
 
 		socket = socketIO.connect(cs);

@@ -6,11 +6,16 @@ const program = require('commander');
 require('pkginfo')(module, 'version');
 const version = module.exports.version;
 
-const users = {}
+const users = [];
+const sockets = [];
 
 const Models = {
 	User: function(socket) {
-		this.socket = socket;
+		var _socket = socket;
+		var _name;
+		this.setName = function(name) {
+			_socket = socket;
+		}
 	}
 }
 
@@ -20,7 +25,10 @@ program
 	.parse(process.argv);
 
 io.on('connection', function(socket) {
-	console.log('foo');
+	let user = new Models.User(socket);
+	users.push(user);
+	sockets.push(socket);
+	console.log('Socket ' + socket.conn.id + ' has connected');
 	io.on('send', function(data) {
 		console.log(data);
 		io.emit('message', data);
