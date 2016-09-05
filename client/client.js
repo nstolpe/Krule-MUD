@@ -1,80 +1,28 @@
 'use strict'
-const vorpal = require('vorpal')();
+const Vorpal = require('vorpal')();
 require('pkginfo')(module, 'version');
 const version = module.exports.version;
 const socketIO = require('socket.io-client');
+const program = require('commander');
 
-var socket;
+Vorpal.Socket = require('./socket')();
+// var socket;
 
-vorpal
-	.command('connect')
-	.option('-h, --host [host]', 'The host')
-	.option('-p, --port [port]', 'The port')
-	.option('-n, --name <name>', 'User/account name')
-	.alias('cn')
-	.description('Connects to a MUD server.\n-s/--server is optional and defaults to \'localhost\'\n-p/--port is optional and defaults to 1138\n-n/--name is required')
-	.validate(function(args) {
-		if (args.options.name === undefined)
-			return 'The <name> option is required. See `help connect` for details'
-		return true;
-	})
-	.action(function(args, cb) {
-		this.log(args);
-		let cs = 'http://' + (args.options.host || 'localhost') + ':' + (args.options.port || 1138);
-cs = 'poo';
-		this.log(cs)
+program
+	.version(version)
+	.usage('[options] Launches a krule-MUD terminal. If [server] is passed an attempt will be made to connect automatically.')
+	.option('-s, --server [server]', 'The host to connect to. Defaults to `localhost` when passed without value.')
+	.option('-p, --port [port]', 'The port to connect to on [server]. Requires [server]. Defaults to `1138` when passed with not value or when [server] is passed without [port].')
+	.parse(process.argv);
 
-		socket = socketIO.connect(cs);
-		cb();
-	});
+Vorpal.use(require('./commands'));
 
-vorpal
-	.command('clear', 'Clears the screen.\n')
-	.action(function(args, cb) {
-		let blank = '';
-		for (let i = 0, l = process.stdout.rows; i < l; i++) blank += '\n';
-
-		vorpal.ui.redraw(blank);
-		vorpal.ui.redraw.clear();
-		vorpal.ui.redraw.done();
-
-		cb();
-	});
-
-vorpal.exec('clear').then(function(data) {
-	vorpal.log('Welcome to krule-MUD');
-	vorpal.log('You have not connected to a server yet, your options are limited (type help if you\'re stuck)');
+Vorpal.exec('clear').then(function(data) {
+	Vorpal.log('Welcome to the krule-MUD client.');
+	Vorpal.log('You are not connected to a server, your options are limited (type `help` if you\'re stuck)');
 })
 
-
-vorpal.delimiter('krule-MUD >>').show();
-// let readline = require('readline'),
-// 	socketio = require('socket.io-client'),
-// 	util = require('util'),
-// 	color = require('ansi-color').set;
-//
-// let nick,
-// 	socket = socketio.connect('http://localhost:3000'),
-// 	rl = readline.createInterface(process.stdin, process.stdout);
-//
-// rl.question('Please enter a nickname: ', function(name) {
-// 	nick = name;
-// 	let msg = nick + " has joined";
-// 	socket.emit('send', { type: 'notice', message: msg });
-// 	rl.prompt(true);
-// })
-//
-// rl.on('line', function(line) {
-// 	if (line[0] == '/' && line.length > 1) {
-// 		let cmd = line.match(/[a-z]+\b/)[0],
-// 		arg = line.substr(cmd.length + 2, line.length)
-// 		chatCommand(cmd, arg);
-// 	} else {
-// 		socket.emit('send', { type: 'chat', message: line, nick: nick });
-// 		rl.prompt(true);
-// 	}
-// })
-//
+Vorpal.delimiter('krule-MUD >>').show();
 // socket.on('message', function(data) {
 // 	let leader;
 //
@@ -112,11 +60,4 @@ vorpal.delimiter('krule-MUD >>').show();
 // 		default:
 // 			print('invalid command');
 // 	}
-// }
-//
-// function print(msg) {
-// 	process.stdout.clearLine();
-// 	process.stdout.cursorTo(0);
-// 	console.log(msg);
-// 	rl.prompt(true);
 // }
