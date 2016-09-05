@@ -1,6 +1,4 @@
 'use strict'
-const app = require('http').createServer()
-const io = require('socket.io')(app);
 const program = require('commander');
 
 require('pkginfo')(module, 'version');
@@ -9,13 +7,10 @@ const version = module.exports.version;
 const users = [];
 const sockets = [];
 
-const Models = {
-	User: function(socket) {
-		var _socket = socket;
-		var _name;
-		this.setName = function(name) {
-			_socket = socket;
-		}
+class User {
+	constructor(ws, name) {
+		this.ws = ws;
+		this.name = name;
 	}
 }
 
@@ -24,16 +19,20 @@ program
 	.option('-p, --port [port]', 'Port to serve from. Optional, defaults to 1138.', 1138)
 	.parse(process.argv);
 
-io.on('connection', function(socket) {
-	let user = new Models.User(socket);
-	users.push(user);
-	sockets.push(socket);
-	console.log('Socket ' + socket.conn.id + ' has connected');
-	io.on('send', function(data) {
-		console.log(data);
-		io.emit('message', data);
-	})
+const WebSocketServer = require('ws').Server,
+	wss = new WebSocketServer( { port: program.port });
+
+wss.on('connection', function(ws) {
+	// let user = new User(ws);
+	// users.push(user);
+	sockets.push(ws);
+	ws.send(JSON.stringify({ type: 'PROMPT', message: 'Please enter your name' }));
+	// console.log(ws);
+	console.log('Socket ' + ws + ' has connected');
+	// ws.on('send', function(data) {
+	// 	console.log(data);
+	// 	ws.emit('message', data);
+	// })
 });
 
-app.listen(program.port);
 console.log('listening on ' + program.port);

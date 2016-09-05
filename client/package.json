@@ -13,6 +13,7 @@
     "commander": "^2.9.0",
     "pkginfo": "^0.4.0",
     "socket.io-client": "latest",
-    "vorpal": "^1.11.4"
+    "vorpal": "^1.11.4",
+    "ws": "^1.1.1"
   }
 }

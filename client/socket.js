@@ -1,19 +1,42 @@
 'use strict';
-let client = require('socket.io-client');
-let _socket = new WeakMap();
+const WebSocket = require('ws');
+const _ws = new WeakMap();
+const _Vorpal = new WeakMap();
 
 class Socket {
-	constructor(options) {
+	constructor(Vorpal) {
+		_Vorpal.set(this, Vorpal);
 	}
 	connect(server, port) {
-		let socket = client.connect('http://' + server + ':' + port);
-		_socket.set(this, socket);
+		let ws = new WebSocket('http://' + server + ':' + port);
+
+		_ws.set(this, ws);
+
+		let self = this;
+
+		ws.onmessage = function(event) {
+			let message
+			try {
+				message = JSON.parse(event.data);
+				self.receiveMessage(message);
+			} catch(e) {
+				// _Vorpal.get(this).log(e);
+				return _Vorpal.get(this).log(Vorpal.chalk.red('Something went wrong between the server and here.'));
+			}
+		};
 	}
-	socket() {
-		return _socket.get(this);
+	ws() {
+		return _ws.get(this);
+	}
+	receiveMessage(message) {
+		_Vorpal.get(this).log(message);
+		switch(message.type) {
+			case 'PROMPT':
+				break;
+		}
 	}
 }
 
-module.exports = function() {
-	return new Socket();
+module.exports = function(Vorpal) {
+	Vorpal.Socket = new Socket(Vorpal);
 }

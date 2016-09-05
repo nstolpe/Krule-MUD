@@ -1,7 +1,5 @@
 'use strict';
 
-const Socket = require('./socket')();
-
 module.exports = function(Vorpal) {
 	Vorpal
 		.command('connect')
@@ -21,7 +19,7 @@ module.exports = function(Vorpal) {
 				connectionString = 'http://' + server + ':' + port;
 
 			Vorpal.Socket.connect(server, port);
-			Vorpal.Socket.socket().on('connect', function(data) {
+			Vorpal.Socket.ws().on('connect', function(data) {
 				Vorpal.log(Vorpal.chalk.green('Successfully connected to %s on port %s.'), server, port);
 			}).on('connect_error', function(error) {
 				Vorpal.log(Vorpal.chalk.red('Failed to connect to `%s` on port `%s`.'), server, port);
