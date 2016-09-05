@@ -7,7 +7,7 @@ module.exports = function(Vorpal) {
 		.option('-p, --port [port]', 'The port')
 		// .option('-n, --name <name>', 'User/account name')
 		.alias('cn')
-		.description('Connects to a MUD server.\n[server] is optional and defaults to \'localhost\'\n[port] is optional and defaults to 1138\n[name] is required')
+		.description('Connects to a MUD server.\n[server] is optional and defaults to \'localhost\'\n[port] is optional and defaults to 1138\n[name] is required\n')
 		// .validate(function(args) {
 		// 	if (args.options.name === undefined)
 		// 		return Vorpal.chalk.red('The <name> option is required. See `help connect` for details');
@@ -17,16 +17,8 @@ module.exports = function(Vorpal) {
 			let server = args.options.server || 'localhost',
 				port = args.options.port || 1138,
 				connectionString = 'http://' + server + ':' + port;
-
+				
 			Vorpal.Socket.connect(server, port);
-			Vorpal.Socket.ws().on('connect', function(data) {
-				Vorpal.log(Vorpal.chalk.green('Successfully connected to %s on port %s.'), server, port);
-			}).on('connect_error', function(error) {
-				Vorpal.log(Vorpal.chalk.red('Failed to connect to `%s` on port `%s`.'), server, port);
-				this.disconnect();
-			}).on('disconnect', function() {
-				Vorpal.log('disconnect');
-			});
 			cb();
 		});
 
