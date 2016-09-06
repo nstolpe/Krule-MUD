@@ -17,10 +17,24 @@ module.exports = function(Vorpal) {
 			let server = args.options.server || 'localhost',
 				port = args.options.port || 1138,
 				connectionString = 'http://' + server + ':' + port;
-			this.log(Vorpal.Socket.connect(server, port, cb));
-			// cb();
-		});
 
+			Vorpal.Socket.connect(server, port);
+			cb();
+		});
+	Vorpal
+		.command('receive message <message>')
+		.hidden()
+		.action(function(args, cb) {
+
+		});
+	Vorpal
+		.mode('second')
+		.hidden()
+		.delimiter('segundo::')
+		.init(function(args, cb) {
+			this.log(args);
+			cb();
+		});
 	Vorpal
 		.command('clear', 'Clears the screen.\n')
 		.action(function(args, cb) {

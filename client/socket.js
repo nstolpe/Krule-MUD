@@ -10,7 +10,7 @@ class Socket {
 	/**
 	 * Connects to http://<server>:<port>
 	 */
-	connect(server, port, cb) {
+	connect(server, port) {
 		let ws,
 			Vorpal = _Vorpal.get(this),
 			message,
@@ -22,18 +22,19 @@ class Socket {
 			Vorpal.log(Vorpal.chalk.green('Connected to %s on port %s.'), server, port);
 			ws.send(JSON.stringify({ type: 'NEW_CONNECTION', message: 'New connection' }));
 			_ws.set(this, ws);
+			Vorpal.exec('second');
 		});
 
+		// @TODO log the actual error somewhere.
 		ws.on('error', function(err) {
-			return { type: 'ERROR', message: Vorpal.chalk.red('Connection to server failed') };
+			Vorpal.log(Vorpal.chalk.red('Failed to connect to %s on port %s'), server, port);
+			// return { type: 'ERROR', message: Vorpal.chalk.red('Connection to server failed') };
 		});
 
-		ws.on('message', function(msg) {
-			message = _self.parseMessage(msg);
-			Vorpal.log(message);
-		});
-		cb();
-		// return message;
+		// ws.on('message', function(msg) {
+		// 	message = _self.parseMessage(msg);
+		// 	Vorpal.log(message);
+		// });
 	}
 	/**
 	 * Returns private property _ws
@@ -54,7 +55,7 @@ class Socket {
 	}
 	/**
 	 * Parses an incoming JSON message. Throws an error
-	 * @TODO if event.data passes JSON.parse(), check if it's a valid message
+	 * @TODO define message properties somewhere more global.
 	 */
 	parseMessage(message) {
 		let parsedMessage,

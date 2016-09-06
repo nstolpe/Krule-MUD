@@ -19,8 +19,8 @@ Vorpal
 	.use(require('./commands'));
 
 Vorpal.exec('clear').then(function(data) {
-	Vorpal.log('Welcome to the krule-MUD client.');
+	Vorpal.log('Welcome to the Krule-MUD client.');
 	Vorpal.log('You are not connected to a server, your options are limited (type `help` if you\'re stuck)');
-})
+});
 
-Vorpal.delimiter('krule-MUD >>').show();
+Vorpal.delimiter('Krule-MUD >>').show();
