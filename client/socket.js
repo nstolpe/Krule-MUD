@@ -48,6 +48,9 @@ class Socket {
 	Vorpal() {
 		return _Vorpal.get(this);
 	}
+	/**
+	 * Checks objects for different keys
+	 */
 	difference(a, b) {
 		let x = new Set(a),
 			y = new Set(b);
