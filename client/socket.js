@@ -22,7 +22,7 @@ class Socket {
 			Vorpal.log(Vorpal.chalk.green('Connected to %s on port %s.'), server, port);
 			ws.send(JSON.stringify({ type: 'NEW_CONNECTION', message: 'New connection' }));
 			_ws.set(this, ws);
-			Vorpal.exec('second');
+			// Vorpal.exec('second');
 		});
 
 		// @TODO log the actual error somewhere.
@@ -35,6 +35,10 @@ class Socket {
 		// 	message = _self.parseMessage(msg);
 		// 	Vorpal.log(message);
 		// });
+	}
+
+	disconnect() {
+
 	}
 	/**
 	 * Returns private property _ws
