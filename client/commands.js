@@ -6,7 +6,7 @@ module.exports = function(Vorpal) {
 		.option('-h, --server [server]', 'The server')
 		.option('-p, --port [port]', 'The port')
 		// .option('-n, --name <name>', 'User/account name')
-		.alias('cn')
+		.alias('c')
 		.description('Connects to a MUD server.\n[server] is optional and defaults to \'localhost\'\n[port] is optional and defaults to 1138\n[name] is required\n')
 		// .validate(function(args) {
 		// 	if (args.options.name === undefined)
@@ -20,6 +20,13 @@ module.exports = function(Vorpal) {
 
 			Vorpal.Socket.connect(server, port);
 			cb();
+		});
+	Vorpal
+		.command('disconnect')
+		.alias('d')
+		.description('Disconnects from a Krule-MUD server. Should be moved to the in server environment.')
+		.action(function(args, cb) {
+			Vorpal.Socket.disconnect();
 		});
 	Vorpal
 		.command('receive message <message>')
