@@ -1,11 +1,15 @@
 'use strict';
 const WebSocket = require('ws');
+const util = require('util');
 const _ws = new WeakMap();
 const _Vorpal = new WeakMap();
 
 class Socket {
 	constructor(Vorpal) {
 		_Vorpal.set(this, Vorpal);
+		this.waitingForConnection = false;
+		this.server;
+		this.port;
 	}
 	/**
 	 * Connects to http://<server>:<port>
@@ -19,10 +23,11 @@ class Socket {
 		ws = new WebSocket('http://' + server + ':' + port);
 
 		ws.on('open', function() {
+			this.server = server;
+			this.port = port;
 			Vorpal.log(Vorpal.chalk.green('Connected to %s on port %s.'), server, port);
-			ws.send(JSON.stringify({ type: 'NEW_CONNECTION', message: 'New connection' }));
 			_ws.set(this, ws);
-			// Vorpal.exec('second');
+			this.waitingForConnection = true;
 		});
 
 		// @TODO log the actual error somewhere.

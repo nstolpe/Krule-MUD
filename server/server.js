@@ -26,7 +26,7 @@ wss.on('connection', function(ws) {
 	// let user = new User(ws);
 	// users.push(user);
 	sockets.push(ws);
-	ws.send(JSON.stringify({ type: 'PROMPT', message: 'Please enter your name' }));
+	ws.send(JSON.stringify({ type: 'CONNECTION_ESTABLISHED', message: util.format('Connection established on %s:%s', srever, port) }));
 
 	ws.on('message', function(msg) {
 		console.log(msg);
@@ -34,7 +34,6 @@ wss.on('connection', function(ws) {
 
 	// console.log(ws);
 	console.log('new socket connection from %s', ws._socket.remoteAddress);
-	console.log(ws._sender);
 	ws.on('send', function(data) {
 		// console.log(data);
 		ws.emit('message', data);
