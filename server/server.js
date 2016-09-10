@@ -35,12 +35,12 @@ wss.on('connection', function(ws) {
 	// console.log(ws);
 	console.log('new socket connection from %s', ws._socket.remoteAddress);
 	console.log(ws._sender);
-	// ws.on('send', function(data) {
-	// 	console.log(data);
-	// 	ws.emit('message', data);
-	// })
+	ws.on('send', function(data) {
+		// console.log(data);
+		ws.emit('message', data);
+	})
 	ws.on('close', function(e) {
-		console.log(e);
+		// console.log(e);
 		console.log('socket disconnecting');
 	});
 });

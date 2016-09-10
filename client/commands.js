@@ -27,12 +27,15 @@ module.exports = function(Vorpal) {
 		.description('Disconnects from a Krule-MUD server. Should be moved to the in server environment.')
 		.action(function(args, cb) {
 			Vorpal.Socket.disconnect();
+			// Vorpal.exec('receive message foo');
+			cb();
 		});
 	Vorpal
 		.command('receive message <message>')
 		.hidden()
 		.action(function(args, cb) {
-
+			this.log('fgfdgsdfg');
+			cb();
 		});
 	Vorpal
 		.mode('second')

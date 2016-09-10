@@ -31,10 +31,10 @@ class Socket {
 			// return { type: 'ERROR', message: Vorpal.chalk.red('Connection to server failed') };
 		});
 
-		// ws.on('message', function(msg) {
-		// 	message = _self.parseMessage(msg);
-		// 	Vorpal.log(message);
-		// });
+		ws.on('message', function(msg) {
+			message = _self.parseMessage(msg);
+			Vorpal.log(message);
+		});
 	}
 
 	disconnect() {
