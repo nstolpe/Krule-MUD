@@ -2,12 +2,12 @@
 const Vorpal = require('vorpal')();
 require('pkginfo')(module, 'version');
 const version = module.exports.version;
-const program = require('commander');
+const commander = require('commander');
 const Socket = require('./socket');
 // Vorpal.Socket = require('./socket')(Vorpal);
 // var socket;
 
-program
+commander
 	.version(version)
 	.usage('[options] Launches a krule-MUD terminal. If [server] is passed an attempt will be made to connect automatically.')
 	.option('-s, --server [server]', 'The host to connect to. Defaults to `localhost` when passed without value.')

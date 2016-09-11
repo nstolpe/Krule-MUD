@@ -36,14 +36,6 @@ module.exports = function(Vorpal) {
 
 		});
 	Vorpal
-		.mode('second')
-		.hidden()
-		.delimiter('segundo::')
-		.init(function(args, cb) {
-			this.log(args);
-			cb();
-		});
-	Vorpal
 		.command('clear', 'Clears the screen.\n')
 		.action(function(args, cb) {
 			let blank = '';
