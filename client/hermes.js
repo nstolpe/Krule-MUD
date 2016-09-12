@@ -10,8 +10,15 @@ const events = require('events');
 
 const receiver = {
     receive: {
-        value: function(msg) {
-        }
+        value: function(msg) { this.emit('message', msg); }
+    },
+    hub: {
+        configurable: true,
+        get: function() { return this._hub; },
+        set: function(hub) { this._hub = hub; }
+    },
+    send: {
+        value: function(msg) { this.hub.send(msg); }
     }
 }
 const hub = {
@@ -74,18 +81,23 @@ const hub = {
 }
 
 function Hub() {
-    let H = Object.create(Function.prototype);
+    let H = Object.create(function() {});
     H.prototype = Object.create(events.EventEmitter.prototype, hub);
     return Object.create(H.prototype).init();
 }
-
-function makeReceiver(obj) {
-    let R = Object.create(Function.prototype);
+/**
+ * Functionality for Receivers should be packaged in proto and passed
+ * in.
+ */
+function Receiver(proto) {
+    let R = Object.create(function() {}),
+        X = Object.create(function() {});
     R.prototype = Object.create(events.EventEmitter.prototype, receiver);
+    X.prototype = Object.create(R.prototype, proto);
     return Object.create(R.prototype);
 }
 
 module.exports = {
     Hub: Hub,
-
+    makeReceiver: makeReceiver
 };
