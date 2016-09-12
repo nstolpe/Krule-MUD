@@ -4,6 +4,16 @@ const util = require('util');
 const _ws = new WeakMap();
 const _Vorpal = new WeakMap();
 
+
+module.exports = function(Vorpal) {
+	return {
+		Vorpal: Vorpal,
+		connecting: false,
+		connect: function(server, port) {
+
+		}
+	}
+}
 class Socket {
 	constructor(Vorpal) {
 		_Vorpal.set(this, Vorpal);
@@ -90,7 +100,7 @@ class Socket {
 		return parsedMessage;
 	}
 }
-
-module.exports = function(Vorpal) {
-	Vorpal.Socket = new Socket(Vorpal);
-}
+//
+// module.exports = function(Vorpal) {
+// 	Vorpal.Socket = new Socket(Vorpal);
+// }
