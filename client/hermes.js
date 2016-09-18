@@ -20,7 +20,7 @@ module.exports = {
 		});
 	},
 	Messenger: function() {
-		const messenger = {
+		return {
 			subscriptions: [],
 			queue: [],
 			/**
@@ -77,6 +77,5 @@ module.exports = {
 				action(message);
 			}
 		};
-		return messenger;
 	}
 }
