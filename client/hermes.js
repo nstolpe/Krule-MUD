@@ -48,14 +48,14 @@ module.exports = {
 			},
 			sendMessage: function(message) {
 				if (message.delay > 0)
-					return queueMessage(message);
+					return this.queueMessage(message);
 
 				for (let i = 0, l = this.subscriptions.length; i < l; i++){
 					let subscription = this.subscriptions[i];
 					if (message.receiver === undefined && subscription.messageType === message.type)
-						subscription.subscriber.receive(subscription.action, message);
+						subscription.subscriber.receiveMessage(subscription.action, message);
 					else if (message.receiver === subscription.subscriber && subscription.messageType === message.type)
-						subscription.subscriber.receive(subscription.action, message);
+						subscription.subscriber.receiveMessage(subscription.action, message);
 				}
 				return undefined;
 			},
@@ -63,7 +63,10 @@ module.exports = {
 				let delay = message.delay,
 					timeout;
 				message.delay = 0;
-				timeout = setTimeout(this.send(message), delay);
+				timeout = setTimeout((timeout) => {
+					this.sendMessage(message);
+					this.queue.splice(this.queue.indexOf(timeout), 1);
+				}, delay);
 				this.queue.push(timeout);
 				return timeout;
 			},
