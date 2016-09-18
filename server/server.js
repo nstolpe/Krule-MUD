@@ -3,6 +3,7 @@ const program = require('commander');
 
 require('pkginfo')(module, 'version');
 const version = module.exports.version;
+const util = require('util');
 
 const users = [];
 const sockets = [];
@@ -26,7 +27,7 @@ wss.on('connection', function(ws) {
 	// let user = new User(ws);
 	// users.push(user);
 	sockets.push(ws);
-	ws.send(JSON.stringify({ type: 'CONNECTION_ESTABLISHED', message: util.format('Connection established on %s:%s', srever, port) }));
+	ws.send(JSON.stringify({ type: 'CONNECTION_ESTABLISHED', message: util.format('Connection established on %s:%s', program.server, program.port) }));
 
 	ws.on('message', function(msg) {
 		console.log(msg);
