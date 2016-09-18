@@ -11,7 +11,7 @@ module.exports = {
 	 * @param receiver An optional Messenger object that will receive this message.
 	 * @return object  A new Message object.
 	 */
-	Message: function(options = {}) {
+	Message: function(options = Object.create(null)) {
 		return Object.assign(Object.create(null), {
 			type: options.type || 'message',
 			data: options.data || Object.create(null),
