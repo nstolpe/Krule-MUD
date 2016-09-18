@@ -14,5 +14,8 @@
     "pkginfo": "^0.4.0",
     "vorpal": "^1.11.4",
     "ws": "^1.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
   }
 }
