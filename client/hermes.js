@@ -19,8 +19,9 @@ module.exports = {
 			receiver: options.receiver
 		});
 	},
-	Receiver: function() {
+	Receiver: function(hub) {
 		return {
+			hub: hub,
 			receiveMessage: function(action, message) {
 				action(message);
 			}

@@ -2,8 +2,9 @@
 require('./cli');
 const Hermes = require('./hermes');
 const Vorpal = require('vorpal')();
-const Socket = require('./socket').Socket();
 const Hub = Hermes.Hub();
+const Socket = require('./socket')().Socket(Hub);
+
 Object.assign(Vorpal, Hermes.Receiver())
 Hub.addSubscription(Vorpal, 'server-connection-opened', (message) => Vorpal.log(message.data));
 
