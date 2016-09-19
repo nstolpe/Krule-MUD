@@ -18,7 +18,8 @@ module.exports = function(Vorpal) {
 				port = args.options.port || 1138,
 				connectionString = 'http://' + server + ':' + port;
 
-			Vorpal.Socket.connect(server, port);
+			// send message connect
+			// Vorpal.Socket.connect(server, port);
 			cb();
 		});
 	Vorpal
@@ -26,7 +27,8 @@ module.exports = function(Vorpal) {
 		.alias('d')
 		.description('Disconnects from a Krule-MUD server. Should be moved to the in server environment.')
 		.action(function(args, cb) {
-			Vorpal.Socket.disconnect();
+			// send message disconnect
+			// Vorpal.Socket.disconnect();
 			cb();
 		});
 	Vorpal

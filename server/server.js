@@ -1,17 +1,18 @@
 'use strict'
-const program = require('commander');
 
 require('pkginfo')(module, 'version');
 const version = module.exports.version;
+const program = require('commander');
 const util = require('util');
+const WebSocketServer = require('ws').Server;
 
 const users = [];
 const sockets = [];
 
-class User {
-	constructor(ws, name) {
-		this.ws = ws;
-		this.name = name;
+function User(ws, name) {
+	return {
+		ws: ws,
+		name: name
 	}
 }
 
@@ -20,14 +21,19 @@ program
 	.option('-p, --port [port]', 'Port to serve from. Optional, defaults to 1138.', 1138)
 	.parse(process.argv);
 
-const WebSocketServer = require('ws').Server,
-	wss = new WebSocketServer( { port: program.port });
+
+const wss = new WebSocketServer( { port: program.port });
 
 wss.on('connection', function(ws) {
-	// let user = new User(ws);
+	// let user = User(ws);
 	// users.push(user);
 	sockets.push(ws);
-	ws.send(JSON.stringify({ type: 'CONNECTION_ESTABLISHED', message: util.format('Connection established on %s:%s', program.server, program.port) }));
+	ws.send(JSON.stringify({
+		type: 'connected',
+		data: {
+			message: util.format('Connection established on %s:%s', program.server, program.port)
+		}
+	}));
 
 	ws.on('message', function(msg) {
 		console.log(msg);
