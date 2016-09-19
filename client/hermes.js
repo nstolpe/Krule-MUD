@@ -19,7 +19,14 @@ module.exports = {
 			receiver: options.receiver
 		});
 	},
-	Messenger: function() {
+	Receiver: function() {
+		return {
+			receiveMessage: function(action, message) {
+				action(message);
+			}
+		}
+	},
+	Hub: function() {
 		return {
 			subscriptions: [],
 			queue: [],

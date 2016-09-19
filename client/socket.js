@@ -1,13 +1,10 @@
 'use strict';
 const WebSocket = require('ws');
-const util = require('util');
-const _ws = new WeakMap();
-const _Vorpal = new WeakMap();
-
+const Hermes = require('./hermes');
 
 module.exports = {
 	Socket: function() {
-		return {
+		let socket = {
 			ws: null,
 			server: null,
 			port: null,
@@ -16,7 +13,10 @@ module.exports = {
 				ws.on('open', function() {
 					this.server = server;
 					this.port = port;
-					// send message, connected
+					this.sendMessage(Hermes.Message({
+						type: 'server-connection-opened',
+						data: { port: port, server: server }
+					}));
 				});
 				ws.on('error', function(err) {
 					// send message, failed to connect
@@ -25,7 +25,9 @@ module.exports = {
 
 				});
 			}
-		};
+		}
+		return Object.assign(socket, Hermes.Receiver());
+		// return socket;
 	}
 }
 // function Socket() {

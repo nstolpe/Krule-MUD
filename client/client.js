@@ -1,19 +1,18 @@
 'use strict'
-const Vorpal = require('vorpal')();
-const Socket = require('./socket');
 require('./cli');
-// Vorpal.Socket = require('./socket')(Vorpal);
-// var socket;
+const Hermes = require('./hermes');
+const Vorpal = require('vorpal')();
+const Socket = require('./socket').Socket();
+const Hub = Hermes.Hub();
+Object.assign(Vorpal, Hermes.Receiver())
+Hub.addSubscription(Vorpal, 'server-connection-opened', (message) => Vorpal.log(message.data));
 
-
-
-Vorpal
-	.use(require('./socket'))
-	.use(require('./commands'));
+Vorpal.use(require('./commands'));
 
 Vorpal.exec('clear').then(function(data) {
 	Vorpal.log('Welcome to the Krule-MUD client.');
 	Vorpal.log('You are not connected to a server, your options are limited (type `help` if you\'re stuck)');
+	// Socket.sendMessage(Hermes.Message({data: {a: 'l', c:'p'}}));
 });
 
 Vorpal.delimiter('Krule-MUD >>').show();
