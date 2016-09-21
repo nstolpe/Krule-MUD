@@ -2,24 +2,26 @@
 const WebSocket = require('ws');
 const Hermes = require('./hermes');
 
-module.exports = function(Hub) {
+module.exports = function() {
 	return {
-		Socket: function() {
+		Socket: function(Hub) {
 			let socket = {
 				ws: null,
 				server: null,
 				port: null,
 				connect: function(server, port) {
-					this.ws = new WebSocket('http://' + server + ':' + port);
-					ws.on('open', function() {
+					let ws = new WebSocket('ws://' + server + ':' + port);
+					ws.on('open', () => {
 						this.server = server;
 						this.port = port;
-						this.sendMessage(Hermes.Message({
-							type: 'server-connection-opened',
-							data: { port: port, server: server }
-						}));
+						// this.sendMessage(Hermes.Message({
+						// 	type: 'server-connection-opened',
+						// 	data: { port: port, server: server }
+						// }));
+						this.ws = ws;
 					});
 					ws.on('error', function(err) {
+						console.log(err);
 						// send message, failed to connect
 					});
 					ws.on('message', function(msg) {
@@ -27,7 +29,13 @@ module.exports = function(Hub) {
 					});
 				}
 			};
-			return Object.assign(socket, Hermes.Receiver(Hub));
+
+			Object.assign(socket, Hermes.Subscriber(Hub));
+
+			Hub.addSubscription(socket, 'connect', (message) => {
+				socket.connect(message.data.server, message.data.port);
+			});
+			return socket;
 		}
 	}
 }

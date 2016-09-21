@@ -19,7 +19,7 @@ module.exports = {
 			receiver: options.receiver
 		});
 	},
-	Receiver: function(hub) {
+	Subscriber: function(hub) {
 		return {
 			hub: hub,
 			receiveMessage: function(action, message) {

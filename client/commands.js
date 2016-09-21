@@ -1,4 +1,5 @@
 'use strict';
+const Message = require('./hermes').Message;
 
 module.exports = function(Vorpal) {
 	Vorpal
@@ -17,9 +18,12 @@ module.exports = function(Vorpal) {
 			let server = args.options.server || 'localhost',
 				port = args.options.port || 1138,
 				connectionString = 'http://' + server + ':' + port;
-
-			// send message connect
-			// Vorpal.Socket.connect(server, port);
+			Vorpal.hub.sendMessage(
+				Message({
+					type: 'connect',
+					data: { server: server, port: port }
+				})
+			);
 			cb();
 		});
 	Vorpal
