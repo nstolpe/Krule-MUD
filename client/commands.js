@@ -4,16 +4,10 @@ const Message = require('./hermes').Message;
 module.exports = function(Vorpal) {
 	Vorpal
 		.command('connect')
-		.option('-h, --server [server]', 'The server')
+		.option('-h, --host [host]', 'The host')
 		.option('-p, --port [port]', 'The port')
-		// .option('-n, --name <name>', 'User/account name')
 		.alias('c')
 		.description('Connects to a MUD server.\n[server] is optional and defaults to \'localhost\'\n[port] is optional and defaults to 1138\n[name] is required\n')
-		// .validate(function(args) {
-		// 	if (args.options.name === undefined)
-		// 		return Vorpal.chalk.red('The <name> option is required. See `help connect` for details');
-		// 	return true;
-		// })
 		.action(function(args, cb) {
 			let server = args.options.server || 'localhost',
 				port = args.options.port || 1138,
@@ -31,8 +25,12 @@ module.exports = function(Vorpal) {
 		.alias('d')
 		.description('Disconnects from a Krule-MUD server. Should be moved to the in server environment.')
 		.action(function(args, cb) {
-			// send message disconnect
-			// Vorpal.Socket.disconnect();
+			Vorpal.hub.sendMessage(
+				Message({
+					type: 'disconnect',
+					data: { server: server, port: port }
+				})
+			);
 			cb();
 		});
 	Vorpal
