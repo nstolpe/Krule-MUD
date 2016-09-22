@@ -43,9 +43,8 @@ wss.on('connection', function(ws) {
 
 	ws.on('message', function(msg) {
 		console.log(msg);
-	})
+	});
 
-	// console.log(ws);
 	console.log('new socket connection from %s', ws._socket.remoteAddress);
 	ws.on('send', function(data) {
 		// console.log(data);

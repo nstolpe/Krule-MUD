@@ -1,5 +1,5 @@
 'use strict';
-const Message = require('./hermes').Message;
+const Message = require('./turms').Message;
 
 module.exports = function(Vorpal) {
 	Vorpal

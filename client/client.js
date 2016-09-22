@@ -1,11 +1,11 @@
 'use strict'
 require('./cli');
-const Hermes = require('./hermes');
+const Turms = require('./turms');
 const Vorpal = require('vorpal')();
-const Hub = Hermes.Hub();
+const Hub = Turms.Hub();
 const Socket = require('./socket')().Socket(Hub);
 
-Object.assign(Vorpal, Hermes.Subscriber(Hub))
+Object.assign(Vorpal, Turms.Subscriber(Hub))
 Hub.addSubscription(Vorpal, 'server-connection-opened', (message) => Vorpal.log(message.data));
 
 Vorpal.use(require('./commands'));

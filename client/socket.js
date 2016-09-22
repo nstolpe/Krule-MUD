@@ -1,6 +1,6 @@
 'use strict';
 const WebSocket = require('ws');
-const Hermes = require('./hermes');
+const Turms = require('./turms');
 
 module.exports = function() {
 	return {
@@ -14,7 +14,7 @@ module.exports = function() {
 					ws.on('open', () => {
 						this.server = server;
 						this.port = port;
-						// this.sendMessage(Hermes.Message({
+						// this.sendMessage(Turms.Message({
 						// 	type: 'server-connection-opened',
 						// 	data: { port: port, server: server }
 						// }));
@@ -30,7 +30,7 @@ module.exports = function() {
 				}
 			};
 
-			Object.assign(socket, Hermes.Subscriber(Hub));
+			Object.assign(socket, Turms.Subscriber(Hub));
 
 			Hub.addSubscription(socket, 'connect', (message) => {
 				socket.connect(message.data.server, message.data.port);
