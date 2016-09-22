@@ -1,16 +1,14 @@
 'use strict'
 
 module.exports = {
-	/**
-	 * An object to be sent to or received by a Messenger.
-	 * @param type     A string value that will be used by Messenger.send() to determine
-	 *                 which of it's subscribers receive() method is called. Defaults to 'message'.
-	 * @param data     A data object for use in the action callback when a message is sent.
-	 *                 Defaults to an object with null prototype.
-	 * @param delay    The length of time a message will wait before being sent. Defaults to 0.
-	 * @param receiver An optional Messenger object that will receive this message.
-	 * @return object  A new Message object.
-	 */
+	// An object to be sent to or received by a Messenger.
+	// @param type     A string value that will be used by Messenger.send() to determine
+	//                 which of it's subscribers receive() method is called. Defaults to 'message'.
+	// @param data     A data object for use in the action callback when a message is sent.
+	//                 Defaults to an object with null prototype.
+	// @param delay    The length of time a message will wait before being sent. Defaults to 0.
+	// @param receiver An optional Messenger object that will receive this message.
+	// @return object  A new Message object.
 	Message: function(options = Object.create(null)) {
 		return Object.assign(Object.create(null), {
 			type: options.type || 'message',
@@ -31,14 +29,12 @@ module.exports = {
 		return {
 			subscriptions: [],
 			queue: [],
-			/**
-			 * Adds a new subscription to the Messenger's subscriptions[].
-			 * @param  subscriber   A Messenger object (or just an object that implements a receive() function).
-			 * @param  messageType  A string value corresponding to the Message.type on an incoming Message
-			 *                      that will trigger the subsciber's receive() method.
-			 * @param  action       A callback that will be triggered when the subscriber receives a Message.
-			 * @return Object       The subscription object, useful for caching and late use with removeSubscription().
-			 */
+			// Adds a new subscription to the Messenger's subscriptions[].
+			// @param  subscriber   A Messenger object (or just an object that implements a receive() function).
+			// @param  messageType  A string value corresponding to the Message.type on an incoming Message
+			//                      that will trigger the subsciber's receive() method.
+			// @param  action       A callback that will be triggered when the subscriber receives a Message.
+			// @return Object       The subscription object, useful for caching and late use with removeSubscription().
 			addSubscription: function(subscriber, messageType, action) {
 				let subscription = {
 					subscriber: subscriber,
@@ -78,9 +74,6 @@ module.exports = {
 				this.queue.push(timeout);
 				return timeout;
 			},
-			/**
-			 *
-			 */
 			receiveMessage: function(action, message) {
 				action(message);
 			}
