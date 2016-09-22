@@ -7,27 +7,33 @@ const util = require('util');
 const WebSocketServer = require('ws').Server;
 
 const users = [];
-const sockets = [];
+const clients = [];
 
-function User(ws, name) {
+function Client({ options }) {
 	return {
-		ws: ws,
-		name: name
+		socket: options.socket,
+		name: options.name
 	}
 }
 
 program
 	.version(version)
-	.option('-p, --port [port]', 'Port to serve from. Optional, defaults to 1138.', 1138)
+	.option('-p, --port <port>', 'Port to serve from. If not passed, defaults to 1138.', 1138)
+	.option('-s, --server <server>', 'The name of your server.')
 	.parse(process.argv);
 
+// check for required name flag/option pair.
+if (!program.server) {
+	console.error("  error: `-s, --server <server>' argument missing");
+	process.exit(1);
+}
 
 const wss = new WebSocketServer( { port: program.port });
 
 wss.on('connection', function(ws) {
-	// let user = User(ws);
-	// users.push(user);
-	sockets.push(ws);
+	let client = Client({ socket: ws });
+	clients.push(client);
+
 	ws.send(JSON.stringify({
 		type: 'connected',
 		data: {
@@ -51,5 +57,4 @@ wss.on('connection', function(ws) {
 	});
 });
 
-
-console.log('listening on ' + program.port);
+console.log("krule-MUD server '%s' started.\nServer listening on %s", program.server, program.port);
