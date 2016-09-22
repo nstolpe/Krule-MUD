@@ -9,7 +9,7 @@ const WebSocketServer = require('ws').Server;
 const users = [];
 const clients = [];
 
-function Client({ options }) {
+function Client(options) {
 	return {
 		socket: options.socket,
 		name: options.name
