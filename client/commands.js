@@ -27,8 +27,7 @@ module.exports = function(Vorpal) {
 		.action(function(args, cb) {
 			Vorpal.hub.sendMessage(
 				Message({
-					type: 'disconnect',
-					data: { server: server, port: port }
+					type: 'disconnect'
 				})
 			);
 			cb();
