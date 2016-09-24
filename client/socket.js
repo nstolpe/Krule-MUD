@@ -1,6 +1,6 @@
 'use strict';
 const WebSocket = require('ws');
-const Turms = require('./turms');
+const Turms = require('turms');
 
 const addSubscriptions = function(socket, Hub) {
 	Hub.addSubscription(socket, 'connect', (message) => {
