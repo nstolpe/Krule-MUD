@@ -1,12 +1,14 @@
 'use strict';
-const Message = require('./turms').Message;
+const Message = require('turms').Message;
+const os = require('os');
+const files = require('./files');
 
 module.exports = function(Vorpal, Hub) {
 	Vorpal
 		.command('connect')
+		.alias('c')
 		.option('-h, --host [host]', 'The host')
 		.option('-p, --port [port]', 'The port')
-		.alias('c')
 		.description('Connects to a MUD server.\n[server] is optional and defaults to \'localhost\'\n[port] is optional and defaults to 1138\n[name] is required\n')
 		.action(function(args, cb) {
 			let server = args.options.server || 'localhost',
@@ -30,6 +32,23 @@ module.exports = function(Vorpal, Hub) {
 					type: 'disconnect'
 				})
 			);
+			cb();
+		});
+	Vorpal
+		.command('add server')
+		.alias('as')
+		.option('-n, --name <name>', 'The name of the Krule-MUD server you\'d like to save.')
+		.option('-h, --host <host>', 'The host of the Krule-MUD server you\'d like to save.')
+		.option('-p, --port <port>', 'The port of the Krule-MUD server you\'d like to save.')
+		.description('Saves a Krule-MUD server\'s configuration so you can  connect by name instead of host and port.')
+		.validate(function(args) {
+			if (!args.options.name || !args.options.host || !args.options.port)
+				return '<name>, <host> and <port> are all required to add a server.';
+			else
+				return true;
+		})
+		.action(function(args, cb) {
+			files.addServer(args.options.name, args.options.host, args.options.port);
 			cb();
 		});
 	Vorpal
