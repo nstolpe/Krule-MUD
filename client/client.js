@@ -1,14 +1,17 @@
 'use strict'
 require('./cli');
+
 const Turms = require('./turms');
 const Vorpal = require('vorpal')();
 const Hub = Turms.Hub();
-const Socket = require('./socket')().Socket(Hub);
+const Socket = require('./socket')(Hub);
 
-Object.assign(Vorpal, Turms.Subscriber(Hub))
+Object.assign(Vorpal, Turms.Subscriber())
 Hub.addSubscription(Vorpal, 'server-connection-opened', (message) => Vorpal.log(message.data));
 
-Vorpal.use(require('./commands'));
+// Vorpal.use(require('./commands'));
+
+require('./commands')(Vorpal, Hub);
 
 Vorpal.exec('clear').then(function(data) {
 	Vorpal.log('Welcome to the Krule-MUD client.');

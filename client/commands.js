@@ -1,7 +1,7 @@
 'use strict';
 const Message = require('./turms').Message;
 
-module.exports = function(Vorpal) {
+module.exports = function(Vorpal, Hub) {
 	Vorpal
 		.command('connect')
 		.option('-h, --host [host]', 'The host')
@@ -12,7 +12,7 @@ module.exports = function(Vorpal) {
 			let server = args.options.server || 'localhost',
 				port = args.options.port || 1138,
 				connectionString = 'http://' + server + ':' + port;
-			Vorpal.hub.sendMessage(
+			Hub.sendMessage(
 				Message({
 					type: 'connect',
 					data: { server: server, port: port }
@@ -25,7 +25,7 @@ module.exports = function(Vorpal) {
 		.alias('d')
 		.description('Disconnects from a Krule-MUD server. Should be moved to the in server environment.')
 		.action(function(args, cb) {
-			Vorpal.hub.sendMessage(
+			Hub.sendMessage(
 				Message({
 					type: 'disconnect'
 				})
